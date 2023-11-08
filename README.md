@@ -1,3 +1,7 @@
+> :info: **building for singletrail-map.ch:**
+> docker build . -t joeakeem/brouter-web
+> docker push joeakeem/brouter-web
+
 # brouter-web
 
 Web client (by [@nrenner](https://github.com/nrenner) and [contributors](https://github.com/nrenner/brouter-web/graphs/contributors)) for the BRouter routing engine (by [@abrensch](https://github.com/abrensch)).
