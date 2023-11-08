@@ -1,4 +1,5 @@
-> [!NOTE] > **building for singletrail-map.ch:**
+> [!NOTE]
+> **building for singletrail-map.ch:**
 > docker build . -t joeakeem/brouter-web
 > docker push joeakeem/brouter-web
 
