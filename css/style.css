@@ -277,6 +277,18 @@ input#trackname:focus:invalid {
 .circlego-outside {
     cursor: not-allowed;
 }
+.roundtrip-draw-enabled {
+    cursor: crosshair;
+}
+.roundtrip-popup .form-group {
+    margin-bottom: 8px;
+}
+.roundtrip-popup .roundtrip-coords {
+    margin-bottom: 6px;
+}
+.roundtrip-popup .roundtrip-results {
+    margin-bottom: 6px;
+}
 .leaflet-popup-content p {
     margin: 0.5em 0;
 }

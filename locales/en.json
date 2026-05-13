@@ -205,6 +205,17 @@
     "route-quality-surface": "Road surface/quality",
     "route-tooltip-segment": "Drag to create a new waypoint. Click to toggle straight line.",
     "route-tooltip-waypoint": "Waypoint. Drag to move; Click to remove.",
+    "roundtrip": {
+      "activate": "Plan roundtrip (T key)",
+      "calculate": "Calculate roundtrips",
+      "calculating": "Calculating…",
+      "clear": "Clear",
+      "deactivate": "Cancel roundtrip planning (T key)",
+      "distance-label": "Target distance (km)",
+      "error": "Could not calculate route: {{msg}}",
+      "route": "Route {{index}}",
+      "select-route": "Choose a route:"
+    },
     "strava-biking": "Show Strava biking segments",
     "strava-running": "Show Strava running segments",
     "strava-shortcut": "{{action}}\n({{key}} key to toggle layer, click to reload for current area)",

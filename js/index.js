@@ -35,6 +35,7 @@
             deleteRouteButton,
             pois,
             circlego,
+            roundtrips,
             urlHash;
         // By default bootstrap-select use glyphicons
         $('.selectpicker').selectpicker({
@@ -391,9 +392,12 @@
             circlego.addTo(map);
         }
 
+        roundtrips = BR.roundtrips(routing, routingOptions);
+        roundtrips.addTo(map);
+
         var buttons = [drawButton, beelineButton, reverseRouteButton, nogos.getButton()];
         if (circlego) buttons.push(circlego.getButton());
-        buttons.push(deletePointButton, deleteRouteButton);
+        buttons.push(roundtrips.getButton(), deletePointButton, deleteRouteButton);
 
         L.easyBar(buttons).addTo(map);
         nogos.preventRoutePointOnCreate(routing);
