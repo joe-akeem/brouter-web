@@ -280,6 +280,9 @@ input#trackname:focus:invalid {
 .roundtrip-draw-enabled {
     cursor: crosshair;
 }
+.roundtrip-draw-enabled #roundtripNavButton {
+    color: #5bc0de;
+}
 .roundtrip-popup .form-group {
     margin-bottom: 8px;
 }

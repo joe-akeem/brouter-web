@@ -395,9 +395,14 @@
         roundtrips = BR.roundtrips(routing, routingOptions);
         roundtrips.addTo(map);
 
-        var buttons = [drawButton, beelineButton, reverseRouteButton, nogos.getButton()];
+        document.getElementById('roundtripNavButton').addEventListener('click', function (e) {
+            e.preventDefault();
+            roundtrips.activate(true);
+        });
+
+        var buttons = [drawButton, roundtrips.getButton(), beelineButton, reverseRouteButton, nogos.getButton()];
         if (circlego) buttons.push(circlego.getButton());
-        buttons.push(roundtrips.getButton(), deletePointButton, deleteRouteButton);
+        buttons.push(deletePointButton, deleteRouteButton);
 
         L.easyBar(buttons).addTo(map);
         nogos.preventRoutePointOnCreate(routing);

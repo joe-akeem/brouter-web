@@ -57,9 +57,15 @@ BR.Roundtrips = L.Evented.extend({
         if (enable) {
             this.map.on('click', this._onMapClick, this);
             L.DomUtil.addClass(this.map.getContainer(), 'roundtrip-draw-enabled');
+            BR.message.showInfo(i18next.t('map.roundtrip.click-hint'));
+            this._hintShown = true;
         } else {
             this.map.off('click', this._onMapClick, this);
             L.DomUtil.removeClass(this.map.getContainer(), 'roundtrip-draw-enabled');
+            if (this._hintShown) {
+                BR.message.hide();
+                this._hintShown = false;
+            }
         }
     },
 

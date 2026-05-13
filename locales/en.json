@@ -207,6 +207,8 @@
     "route-tooltip-waypoint": "Waypoint. Drag to move; Click to remove.",
     "roundtrip": {
       "activate": "Plan roundtrip (T key)",
+      "click-hint": "Click on the map to place the roundtrip starting point",
+      "nav-button": "Plan Roundtrip",
       "calculate": "Calculate roundtrips",
       "calculating": "Calculating…",
       "clear": "Clear",
