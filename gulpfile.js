@@ -27,6 +27,7 @@ var jsonConcat = require('gulp-json-concat');
 var rename = require('gulp-rename');
 var browserSync = require('browser-sync');
 var merge = require('merge-stream');
+var { createProxyMiddleware } = require('http-proxy-middleware');
 var babel = require('gulp-babel');
 var { marked } = require('marked');
 var fs = require('fs');
@@ -387,6 +388,13 @@ gulp.task(
             server: {
                 baseDir: './',
             },
+            middleware: [
+                createProxyMiddleware('/brouter', {
+                    target: 'https://brouter.de',
+                    changeOrigin: true,
+                    secure: false,
+                }),
+            ],
             open: false,
         });
         cb();
