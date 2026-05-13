@@ -3,7 +3,7 @@ BR.Roundtrips = L.Evented.extend({
         shortcut: {
             activate: 84, // 'T'
         },
-        viaDistanceFactor: 0.32,
+        viaDistanceFactor: 0.20,
     },
 
     _active: false,
@@ -245,10 +245,12 @@ BR.Roundtrips = L.Evented.extend({
 
     _calculate(distKm) {
         var bearing = this._bearingToMapCenter();
-        var via = this._destinationPoint(this._startLatlng, bearing, distKm * this.options.viaDistanceFactor);
+        var R = distKm * this.options.viaDistanceFactor;
+        var via1 = this._destinationPoint(this._startLatlng, bearing + 60, R);
+        var via2 = this._destinationPoint(this._startLatlng, bearing - 60, R);
         this.routing.draw(false);
         this.routing.clear();
-        this.routing.setWaypoints([this._startLatlng, via, this._startLatlng]);
+        this.routing.setWaypoints([this._startLatlng, via1, via2, this._startLatlng]);
         this.clear();
     },
 
