@@ -289,6 +289,9 @@ input#trackname:focus:invalid {
 .roundtrip-popup .roundtrip-coords {
     margin-bottom: 6px;
 }
+.roundtrip-popup .roundtrip-mode-toggle {
+    margin-bottom: 8px;
+}
 .roundtrip-popup .roundtrip-results {
     margin-bottom: 6px;
 }

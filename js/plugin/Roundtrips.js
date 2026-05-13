@@ -9,7 +9,9 @@ BR.Roundtrips = L.Evented.extend({
     _active: false,
     _startLatlng: null,
     _startMarker: null,
+    _lastMode: 'distance',
     _lastDistance: 30,
+    _lastDuration: 3,
 
     initialize(routing, routingOptions) {
         this.routing = routing;
@@ -117,24 +119,37 @@ BR.Roundtrips = L.Evented.extend({
         var coordText = this._startLatlng
             ? L.Util.formatNum(this._startLatlng.lat, 5) + ', ' + L.Util.formatNum(this._startLatlng.lng, 5)
             : '';
+        var isDist = this._lastMode !== 'duration';
 
         return (
             '<div class="roundtrip-popup">' +
-            '<p class="roundtrip-coords text-muted small">' +
-            coordText +
-            '</p>' +
-            '<div class="form-group roundtrip-distance-group">' +
-            '<label for="roundtrip-distance" class="control-label">' +
-            i18next.t('map.roundtrip.distance-label') +
-            '</label>' +
+            '<p class="roundtrip-coords text-muted small">' + coordText + '</p>' +
+
+            '<div class="btn-group btn-group-sm w-100 roundtrip-mode-toggle">' +
+            '<button type="button" id="roundtrip-mode-distance" class="btn btn-outline-secondary' + (isDist ? ' active' : '') + '">' +
+            i18next.t('map.roundtrip.mode-distance') +
+            '</button>' +
+            '<button type="button" id="roundtrip-mode-duration" class="btn btn-outline-secondary' + (!isDist ? ' active' : '') + '">' +
+            i18next.t('map.roundtrip.mode-duration') +
+            '</button>' +
+            '</div>' +
+
+            '<div class="form-group roundtrip-distance-group"' + (!isDist ? ' style="display:none"' : '') + '>' +
+            '<label for="roundtrip-distance" class="control-label">' + i18next.t('map.roundtrip.distance-label') + '</label>' +
             '<div class="input-group input-group-sm">' +
-            '<input type="number" id="roundtrip-distance" class="form-control"' +
-            ' min="1" max="500" step="1" value="' +
-            this._lastDistance +
-            '" />' +
+            '<input type="number" id="roundtrip-distance" class="form-control" min="1" max="500" step="1" value="' + this._lastDistance + '" />' +
             '<div class="input-group-append"><span class="input-group-text">km</span></div>' +
             '</div>' +
             '</div>' +
+
+            '<div class="form-group roundtrip-duration-group"' + (isDist ? ' style="display:none"' : '') + '>' +
+            '<label for="roundtrip-duration" class="control-label">' + i18next.t('map.roundtrip.duration-label') + '</label>' +
+            '<div class="input-group input-group-sm">' +
+            '<input type="number" id="roundtrip-duration" class="form-control" min="0.5" max="24" step="0.5" value="' + this._lastDuration + '" />' +
+            '<div class="input-group-append"><span class="input-group-text">h</span></div>' +
+            '</div>' +
+            '</div>' +
+
             '<button id="roundtrip-calculate" class="btn btn-primary btn-sm btn-block" style="margin-top:6px">' +
             i18next.t('map.roundtrip.calculate') +
             '</button>' +
@@ -148,14 +163,49 @@ BR.Roundtrips = L.Evented.extend({
     _bindPopupEvents() {
         var self = this;
 
+        var modeDistBtn = document.getElementById('roundtrip-mode-distance');
+        var modeDurBtn = document.getElementById('roundtrip-mode-duration');
+        var distGroup = document.querySelector('.roundtrip-distance-group');
+        var durGroup = document.querySelector('.roundtrip-duration-group');
+
+        if (modeDistBtn) {
+            L.DomEvent.on(modeDistBtn, 'click', function (e) {
+                L.DomEvent.stop(e);
+                self._lastMode = 'distance';
+                modeDistBtn.classList.add('active');
+                modeDurBtn.classList.remove('active');
+                distGroup.style.display = '';
+                durGroup.style.display = 'none';
+            });
+        }
+
+        if (modeDurBtn) {
+            L.DomEvent.on(modeDurBtn, 'click', function (e) {
+                L.DomEvent.stop(e);
+                self._lastMode = 'duration';
+                modeDurBtn.classList.add('active');
+                modeDistBtn.classList.remove('active');
+                distGroup.style.display = 'none';
+                durGroup.style.display = '';
+            });
+        }
+
         var calcBtn = document.getElementById('roundtrip-calculate');
         if (calcBtn) {
             L.DomEvent.on(calcBtn, 'click', function (e) {
                 L.DomEvent.stop(e);
-                var input = document.getElementById('roundtrip-distance');
-                var dist = parseFloat(input && input.value) || 30;
-                self._lastDistance = dist;
-                self._calculate(dist);
+                var distKm;
+                if (self._lastMode === 'duration') {
+                    var durInput = document.getElementById('roundtrip-duration');
+                    var hours = parseFloat(durInput && durInput.value) || 3;
+                    self._lastDuration = hours;
+                    distKm = hours * self._profileSpeed();
+                } else {
+                    var distInput = document.getElementById('roundtrip-distance');
+                    distKm = parseFloat(distInput && distInput.value) || 30;
+                    self._lastDistance = distKm;
+                }
+                self._calculate(distKm);
             });
         }
 
@@ -166,6 +216,20 @@ BR.Roundtrips = L.Evented.extend({
                 self.clear();
             });
         }
+    },
+
+    _profileSpeed() {
+        var profile = (this.routingOptions.getOptions().profile || '').toLowerCase();
+        var speeds = {
+            'fastbike': 22, 'fastbike-lowtraffic': 20, 'fastbike-asia-pacific': 20,
+            'vm-forum-liegerad-schnell': 25, 'vm-forum-velomobil-schnell': 30,
+            'car-eco': 50, 'car-fast': 70,
+            'moped': 35,
+            'rail': 60,
+            'river': 6,
+            'hiking-mountain': 5,
+        };
+        return speeds[profile] || 15; // default 15 km/h covers trekking and unknown profiles
     },
 
     _bearingToMapCenter() {

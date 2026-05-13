@@ -213,7 +213,10 @@
       "calculating": "Calculating…",
       "clear": "Clear",
       "deactivate": "Cancel roundtrip planning (T key)",
-      "distance-label": "Target distance (km)",
+      "distance-label": "Target distance",
+      "duration-label": "Duration",
+      "mode-distance": "Distance",
+      "mode-duration": "Duration",
       "error": "Could not calculate route: {{msg}}",
       "route": "Route {{index}}",
       "select-route": "Choose a route:"
