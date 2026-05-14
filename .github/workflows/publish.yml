@@ -24,6 +24,7 @@ jobs:
               with:
                   images: joeakeem/singletrail-map-web
                   tags: |
+                      type=ref,event=tag
                       type=semver,pattern={{version}}
                       type=semver,pattern={{major}}.{{minor}}
 
